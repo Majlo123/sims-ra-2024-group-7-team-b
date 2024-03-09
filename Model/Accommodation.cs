@@ -29,8 +29,8 @@ namespace BookingApp.Model
         }
 
         public Accommodation(string name, Location location, int maxGuests, int minReservation)
-        { 
-            this.Name
+        {
+            this.Name = name;
             this.Location = location;
             this.MaxGuests = maxGuests;
             this.MinReservationDays = minReservation;
