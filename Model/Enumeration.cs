@@ -8,11 +8,16 @@ namespace BookingApp.Model
 {
     public class Enumeration
     {
-        enum AccommodationType
+        public enum AccommodationType
         {
             Apartment,
             House,
             Cottage
+        }
+        public enum EntityType
+        {
+            Accommodation,
+            Tour
         }
     }
 }
