@@ -15,6 +15,10 @@ namespace BookingApp.Model
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set;}
         //public int Duration { get; set; }
+        public AccommodationReservation()
+        {
+            
+        }
 
         public AccommodationReservation(Accommodation accommodation, User user, DateOnly startDate, DateOnly endDate)
         {
