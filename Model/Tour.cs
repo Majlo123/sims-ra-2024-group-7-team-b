@@ -13,10 +13,10 @@ namespace BookingApp.Model
         public string Name { get; set; }
         public Location Location { get; set; }
         public string Description { get; set; }
-        //public Language Language { get; set; }
+        public Language Language { get; set; }
         public int MaxGuests { get; set; }
-        //public CheckPoint CheckPoint { get; set; }
-        //public TourTime TourTime { get; set; }
+        public CheckPoint CheckPoint { get; set; }
+        public TourTime TourTime { get; set; }
         public double Duration { get; set; }
 
         //public List<Image>? Images { get; set; }
@@ -26,32 +26,23 @@ namespace BookingApp.Model
         
         }
 
-        public Tour(string name, Location location, string description, 
-                    //Language language,
-                    int maxGuests, 
-                    //CheckPoint checkPoint,
-                    //TourTime tourTime,
-                    double duration)
+        public Tour(string name, Location location, string description, Language language, int maxGuests, CheckPoint checkPoint, TourTime tourTime, double duration)
         {
             Name = name;
             Location = location;
             Description = description;
-            //Language = language;
+            Language = language;
             MaxGuests = maxGuests;
-            //CheckPoint = checkPoint;
-            //TourTime = tourTime;
+            CheckPoint = checkPoint;
+            TourTime = tourTime;
             Duration = duration;
         }
         
 
         public string[] ToCSV()
         {
-            string[] values = { Id.ToString(), Name, Location.Id.ToString(), Description.ToString(), 
-                                //Language.Id.ToString(), 
-                                MaxGuests.ToString(), 
-                                //CheckPoint.Id.ToString(), 
-                                //TourTime.Id.ToString(), 
-                                Duration.ToString() };
+            string[] values = { Id.ToString(), Name, Location.Id.ToString(), Description.ToString(), Language.Id.ToString(), 
+                                MaxGuests.ToString(), CheckPoint.Id.ToString(), TourTime.Id.ToString(), Duration.ToString() };
             return values;
         }
         
@@ -62,10 +53,10 @@ namespace BookingApp.Model
             Name = Convert.ToString(values[1]);
             Location = new Location() { Id = Convert.ToInt32(values[2])};
             Description = Convert.ToString(values[3]);
-           // Language = new Language() { Id = Convert.ToInt32(values[4])};
+            Language = new Language() { Id = Convert.ToInt32(values[4])};
             MaxGuests= Convert.ToInt32(values[5]);
-           // CheckPoint = new CheckPoint() {  Id = Convert.ToInt32(values[6])};
-           // TourTime=new TourTime() { Id = Convert.ToInt32(values[7])};
+            CheckPoint = new CheckPoint() {  Id = Convert.ToInt32(values[6])};
+            TourTime=new TourTime() { Id = Convert.ToInt32(values[7])};
             Duration = Convert.ToDouble(values[8]);
 
         }
