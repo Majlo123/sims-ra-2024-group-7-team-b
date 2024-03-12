@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BookingApp.Model;
 
 namespace BookingApp.Model
 {
@@ -12,13 +13,14 @@ namespace BookingApp.Model
         public int Id { get; set; }
         public string Path { get; set; }
         public int EntityId { get; set; }
-        public EntityType Type { get; set; }
+
+        public Model.Enumeration.EntityType Type{ get; set; }
 
         public Image()
         {
             
         }
-        public Image(string path, int entityId, EntytyType type)
+        public Image(string path, int entityId, Model.Enumeration.EntityType type)
         {
             Path = path;
             EntityId = entityId;
@@ -36,7 +38,7 @@ namespace BookingApp.Model
             Id = Convert.ToInt32(values[0]);
             Path = values[1];
             EntityId = Convert.ToInt32(values[2]);
-            Type = values[3];
+            Enum.TryParse(values[3], out  Model.Enumeration.EntityType Type);
         }
     }
 }
