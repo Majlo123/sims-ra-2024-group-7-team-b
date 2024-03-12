@@ -29,4 +29,8 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="View\Guest\" />
+  </ItemGroup>
+
 </Project>
