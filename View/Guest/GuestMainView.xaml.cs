@@ -1,5 +1,7 @@
-﻿using System;
+﻿using BookingApp.DTO;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +21,8 @@ namespace BookingApp.View.Guest
     /// </summary>
     public partial class GuestMainView : Window
     {
+        public ObservableCollection<AccommodationDTO> accommodations { get; set; }
+        public AccommodationDTO selectedAccommodation { get; set; }
         public GuestMainView()
         {
             InitializeComponent();
