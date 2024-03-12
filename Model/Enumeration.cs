@@ -19,5 +19,12 @@ namespace BookingApp.Model
             Accommodation,
             Tour
         }
+        public enum UserType
+        {
+            Owner,
+            Guest,
+            Guide,
+            Tourist
+        }
     }
 }

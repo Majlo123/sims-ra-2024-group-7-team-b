@@ -1,5 +1,6 @@
 ﻿using BookingApp.Model;
 using BookingApp.Repository;
+using BookingApp.View.Guest;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -49,9 +50,11 @@ namespace BookingApp.View
             {
                 if(user.Password == txtPassword.Password)
                 {
-                    CommentsOverview commentsOverview = new CommentsOverview(user);
-                    commentsOverview.Show();
-                    Close();
+                    if(user.Type == Enumeration.UserType.Guest)
+                    {
+                        GuestMainView guestMainView = new GuestMainView();
+                        guestMainView.ShowDialog();
+                    }
                 } 
                 else
                 {
