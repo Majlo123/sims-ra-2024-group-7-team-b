@@ -1,4 +1,6 @@
 ﻿using BookingApp.DTO;
+using BookingApp.Model;
+using BookingApp.Repository;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,9 +25,22 @@ namespace BookingApp.View.Guest
     {
         public ObservableCollection<AccommodationDTO> accommodations { get; set; }
         public AccommodationDTO selectedAccommodation { get; set; }
+
+        private AccommodationRepository accommodationRepository { get; set; }
         public GuestMainView()
         {
             InitializeComponent();
+            DataContext = this;
+            accommodations = new ObservableCollection<AccommodationDTO>();
+            Update();
+        }
+        public void Update()
+        {
+            accommodations.Clear();
+            foreach(Accommodation accommodation in accommodationRepository.GetAll())
+            {
+                accommodations.Add(new AccommodationDTO(accommodation));
+            }
         }
     }
 }
