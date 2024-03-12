@@ -12,77 +12,63 @@ namespace BookingApp.Model
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string City { get; set; }
-        public string Country { get; set; }
+        public Location Location { get; set; }
+        public Enumeration.AccommodationType Type { get; set; }
         public int MaxGuests { get; set; }
-        public int MinReservation { get; set; }
-
-        
+        public int MinReservationDays { get; set; }
         public int UncancellablePeriod { get; set; }//Number of days before reservation where you can't cancel
-        public List<string>? Images { get; set; }
+        public List<Image>? Images { get; set; }
 
         public Accommodation()
         {
-            
+
         }
 
-        public Accommodation(string name, string city, string country, int maxGuests, int minReservation)
-        { 
-            this.Name = name;
-            this.City = city;
-            this.Country = country;
-            this.MaxGuests = maxGuests;
-            this.MinReservation = minReservation;
-            this.UncancellablePeriod = 1;
-            this.Images = new List<string>();
-        }
-        public Accommodation(string name, string city, string country, int maxGuests, int minReservation, int uncancellablePreriod)
+        //public Accommodation(string name, Location location, Enumeration.AccommodationType type, int maxGuests, int minReservation)
+        //{ 
+        //    this.Name = name;
+        //    this.Location = location;
+        //    this.Type = type;
+        //    this.MaxGuests = maxGuests;
+        //    this.MinReservationDays = minReservation;
+        //    this.UncancellablePeriod = 1;
+        //    this.Images = new List<Image>();
+        //}
+        public Accommodation(string name, Location location, Enumeration.AccommodationType type, int maxGuests, int minReservation, int uncancellablePreriod)
         {
             this.Name = name;
-            this.City = city;
-            this.Country = country;
+            this.Location = location;
+            this.Type = type;
             this.MaxGuests = maxGuests;
-            this.MinReservation = minReservation;
+            this.MinReservationDays = minReservation;
             this.UncancellablePeriod = uncancellablePreriod;
-            this.Images = new List<string>();
+            this.Images = new List<Image>();
+        }
+        public Accommodation(int id, string name, Location location, Enumeration.AccommodationType type, int maxGuests, int minReservation, int uncancellablePreriod)
+        {
+            this.Id = id;
+            this.Name = name;
+            this.Location = location;
+            this.Type = type;
+            this.MaxGuests = maxGuests;
+            this.MinReservationDays = minReservation;
+            this.UncancellablePeriod = uncancellablePreriod;
+            this.Images = new List<Image>();
         }
 
         public void FromCSV(string[] values)
         {
             Id = Convert.ToInt32(values[0]);
             Name = values[1];
-            City = values[2];
-            Country = values[3];
+            Location = new Location() { Id = Convert.ToInt32(values[2]) };
+            Enum.TryParse(values[3], out Enumeration.AccommodationType Type);
             MaxGuests = Convert.ToInt32(values[4]);
-            MinReservation = Convert.ToInt32(values[5]);
+            MinReservationDays = Convert.ToInt32(values[5]);
             UncancellablePeriod = Convert.ToInt32(values[6]);
-            if (values.Length > 7)
-            {
-                if (values[7] == "")
-                {
-                    return;
-                }
-
-                string[] images = values[7].Split(',');
-                if(Images != null)
-                {
-                    foreach (string image in images)
-                    {
-                        Images.Add(image);
-                    }
-                }
-               
-            }
         }
-
         public string[] ToCSV()
         {
-            string[] values = {Id.ToString(), Name.ToString(), City.ToString(), Country, MaxGuests.ToString(), MinReservation.ToString(), UncancellablePeriod.ToString()};
-            if (Images != null)
-            {
-                string images = String.Join(",", Images);
-                values.Append(images);
-            }
+            string[] values = { Id.ToString(), Name.ToString(), Location.Id.ToString(), Type.ToString(), MaxGuests.ToString(), MinReservationDays.ToString(), UncancellablePeriod.ToString() };
             return values;
         }
     }
