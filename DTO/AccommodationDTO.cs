@@ -39,6 +39,19 @@ namespace BookingApp.DTO
                 }
             }
         }
+        private Model.Enumeration.AccommodationType type;
+        public  Model.Enumeration.AccommodationType Type
+        {
+            get { return type; }
+            set
+            {
+                if(value != type)
+                {
+                    type = value;
+                    OnPropertyChanged(nameof(Type));
+                }
+            }
+        }
         private int maxGuests;
         public int MaxGuests
         {
@@ -90,7 +103,7 @@ namespace BookingApp.DTO
         }
         public Accommodation ToAccommodation()
         {
-            return new Accommodation(Id, name, location, maxGuests, minReservationDays, uncancellablePeriod);
+            return new Accommodation(Id, name, location, type,  maxGuests, minReservationDays, uncancellablePeriod);
         }
 
         protected virtual void OnPropertyChanged(string name)
