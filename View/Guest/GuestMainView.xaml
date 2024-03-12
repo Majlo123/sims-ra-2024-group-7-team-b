@@ -45,8 +45,33 @@
             </Grid>
 
             <Grid Grid.Column="1">
-                
-                
+                <StackPanel Orientation="Horizontal" Width="622"
+                            Height="50px" VerticalAlignment="Top">
+                    <TextBox Width=" 122" 
+                             Height="30px">
+                        
+                    </TextBox>
+                </StackPanel>
+                <DataGrid Height="500px"
+                          Margin="10, 40, 10 ,10"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          SelectionMode="Single"
+                          x:Name="AccommodationsDataGrid"
+                          ItemsSource="{Binding accommodations, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedItem="{Binding selectedAccommodation, UpdateSourceTrigger=PropertyChanged}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name"
+                                            Width="*"
+                                            Binding="{Binding Name}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Max no. of guest"
+                                            Width="*"
+                                            Binding="{Binding MaxGuest}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Max no. of guest"
+                    Width="*"
+                    Binding="{Binding MinReservationDays}"></DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
 
             </Grid>
 
