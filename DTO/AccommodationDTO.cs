@@ -95,7 +95,7 @@ namespace BookingApp.DTO
         public AccommodationDTO(Accommodation accommodation)
         {
             Id = accommodation.Id;
-            name = accommodation.Name;
+            Name = accommodation.Name;
             Location = accommodation.Location;
             MaxGuests = accommodation.MaxGuests;
             MinReservationDays = accommodation.MinReservationDays;
