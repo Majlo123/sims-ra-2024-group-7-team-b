@@ -19,7 +19,7 @@ namespace BookingApp.Model
         public TourTime TourTime { get; set; }
         public double Duration { get; set; }
 
-        //public List<Image>? Images { get; set; }
+        public List<Image>? Images { get; set; }
 
         public Tour() 
         {
@@ -36,8 +36,23 @@ namespace BookingApp.Model
             CheckPoint = checkPoint;
             TourTime = tourTime;
             Duration = duration;
+            this.Images = new List<Image>();
         }
-        
+
+        public Tour(int id,string name, Location location, string description, Language language, int maxGuests, CheckPoint checkPoint, TourTime tourTime, double duration)
+        {
+            Id = id;
+            Name = name;
+            Location = location;
+            Description = description;
+            Language = language;
+            MaxGuests = maxGuests;
+            CheckPoint = checkPoint;
+            TourTime = tourTime;
+            Duration = duration;
+            this.Images = new List<Image>();
+        }
+
 
         public string[] ToCSV()
         {
