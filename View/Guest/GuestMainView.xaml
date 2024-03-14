@@ -20,20 +20,20 @@
             <!--// Base Grid //-->
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="228" />
-                <ColumnDefinition Width="622" />
+                <ColumnDefinition Width="230" />
+                <ColumnDefinition Width="620" />
             </Grid.ColumnDefinitions>
 
             <!--// Navigation Panel //-->
 
             <Grid HorizontalAlignment="Left"
-                  Width="228">
+                  Width="230">
 
                 <Border Background="#272B2F"
                         CornerRadius="20,0,0,20" />
 
                 <StackPanel Height="400"
-                            Width="228" 
+                            Width="230" 
                             VerticalAlignment="Top">
 
                     <!--// Home //-->
@@ -46,7 +46,7 @@
 
             <Grid Grid.Column="1">
                 <StackPanel Orientation="Horizontal"
-                            Width="622"
+                            Width="620"
                             Height="50px"
                             VerticalAlignment="Top">
                     <TextBox x:Name="NameTextBox"
@@ -104,12 +104,23 @@
                         <DataGridTextColumn Header="Name"
                                             Width="*"
                                             Binding="{Binding Name}"/>
+                        <DataGridTextColumn Header="Location"
+                                            Width="*"
+                                            Binding="{Binding MergedLocation}"/>
+                        <DataGridTextColumn Header="Type"
+                                            Width="*"
+                                            Binding="{Binding Type}"/>
                         <DataGridTextColumn Header="Max no. of guest"
                                             Width="*"
-                                            Binding="{Binding MaxGuest}"/>
-                        <DataGridTextColumn Header="Max no. of guest"
-                    Width="*"
-                    Binding="{Binding MinReservationDays}"/>
+                                            Binding="{Binding MaxGuests}"/>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button x:Name="ReserveButton" Width="auto" Content="Reserve" Click="ReserveButton_Click"></Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
                     </DataGrid.Columns>
                 </DataGrid>
 
