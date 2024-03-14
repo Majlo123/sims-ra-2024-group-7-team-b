@@ -91,6 +91,19 @@ namespace BookingApp.DTO
                 }
             }
         }
+        private User owner;
+        public User Owner 
+        {
+            get { return owner; }
+            set 
+            {
+                if (value != owner)
+                { 
+                    owner = value;
+                    OnPropertyChanged(nameof(Owner));
+                }
+            }
+        }
         public AccommodationDTO() { }
         public AccommodationDTO(Accommodation accommodation)
         {
@@ -100,10 +113,11 @@ namespace BookingApp.DTO
             MaxGuests = accommodation.MaxGuests;
             MinReservationDays = accommodation.MinReservationDays;
             UncancellablePeriod = accommodation.UncancellablePeriod;
+            Owner = accommodation.Owner;
         }
         public Accommodation ToAccommodation()
         {
-            return new Accommodation(Id, name, location, type,  maxGuests, minReservationDays, uncancellablePeriod);
+            return new Accommodation(Id, name, location, type,  maxGuests, minReservationDays, uncancellablePeriod,owner);
         }
 
         protected virtual void OnPropertyChanged(string name)
