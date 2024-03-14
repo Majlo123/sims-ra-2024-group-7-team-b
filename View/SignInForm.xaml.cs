@@ -61,10 +61,11 @@ namespace BookingApp.View
                     }
 
                     if (user.Type == Enumeration.UserType.Owner)
-                    { 
+                    {
                         OwnerMainView ownerMainView = new OwnerMainView();
                         ownerMainView.ShowDialog();
-                    else if(user.Type == Enumeration.UserType.Guide)
+                    }
+                    else if (user.Type == Enumeration.UserType.Guide)
                     {
                         GuideMainView guideMainView = new GuideMainView();
                         guideMainView.ShowDialog();
