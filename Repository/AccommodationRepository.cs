@@ -14,10 +14,22 @@ namespace BookingApp.Repository
         private readonly Serializer<Accommodation> _serializer;
 
         private List<Accommodation> _accommodations;
+        private LocationRepository _locationRepository;
+        private List<Location> _locations;
         public AccommodationRepository()
         {
             _serializer = new Serializer<Accommodation>();
             _accommodations = _serializer.FromCSV(FilePath);
+            _locationRepository = new LocationRepository();
+            _locations = _locationRepository.GetAll();
+            FindLocations();
+        }
+        private void FindLocations()
+        {
+            foreach(Accommodation accommodation in _accommodations)
+            {
+                accommodation.Location = _locationRepository.Get(accommodation.Location.Id);
+            }
         }
         public List<Accommodation> GetAll()
         {

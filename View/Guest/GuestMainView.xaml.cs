@@ -53,14 +53,18 @@ namespace BookingApp.View.Guest
             {
                 locations.Add(new LocationDTO(location));
             }
-           LocationComboBox.SelectedIndex = 0;
-            
+            LocationComboBox.SelectedIndex = 0;
+            selectedLocation = new LocationDTO(empty);
+           
         }
         public void Update()
         {
             accommodations.Clear();
             foreach(Accommodation accommodation in accommodationRepository.GetAll())
             {
+                
+                accommodation.Location = locationRepository.Get(accommodation.Location.Id);
+                
                 accommodations.Add(new AccommodationDTO(accommodation));
             }
             
@@ -82,8 +86,10 @@ namespace BookingApp.View.Guest
             {
                 lenghtOfStay = -1;
             }
+            accommodations.Clear();
             foreach(Accommodation accommodation in GetSuitableAccommodations(name, types, locationId, maxGuests, lenghtOfStay)) 
             {
+                accommodation.Location = locationRepository.Get(accommodation.Location.Id);
                 accommodations.Add(new AccommodationDTO(accommodation));
             }
             
@@ -115,6 +121,7 @@ namespace BookingApp.View.Guest
             }
             if(locationId != -1  && locationId!= accommodation.Location.Id)
             {
+                MessageBox.Show(locationId.ToString() +" " + accommodation.Location.Id.ToString());
                 return false;
             }
             if(maxGuests != -1 && maxGuests <  accommodation.MaxGuests)
@@ -145,6 +152,14 @@ namespace BookingApp.View.Guest
             }
 
             return types;
+        }
+
+        private void ReserveButton_Click(object sender, RoutedEventArgs e)
+        {
+            AccommodationDetailsView detail = new AccommodationDetailsView(selectedAccommodation);
+            detail.Owner = this;
+            detail.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            detail.Show();
         }
     }
 }
