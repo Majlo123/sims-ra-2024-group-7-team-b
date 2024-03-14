@@ -1,7 +1,10 @@
 ﻿using BookingApp.Model;
 using BookingApp.Repository;
 using BookingApp.View.Guest;
+
 using BookingApp.View.Owner;
+using BookingApp.View.Guide;
+
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -56,10 +59,15 @@ namespace BookingApp.View
                         GuestMainView guestMainView = new GuestMainView();
                         guestMainView.ShowDialog();
                     }
+
                     if (user.Type == Enumeration.UserType.Owner)
                     { 
                         OwnerMainView ownerMainView = new OwnerMainView();
                         ownerMainView.ShowDialog();
+                    else if(user.Type == Enumeration.UserType.Guide)
+                    {
+                        GuideMainView guideMainView = new GuideMainView();
+                        guideMainView.ShowDialog();
                     }
                 } 
                 else

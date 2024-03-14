@@ -18,7 +18,7 @@ namespace BookingApp.Model
         public int MinReservationDays { get; set; }
         public int UncancellablePeriod { get; set; }//Number of days before reservation where you can't cancel
         public List<Image>? Images { get; set; }
-
+        public User Owner { get; set; }
         public Accommodation()
         {
 
@@ -34,7 +34,7 @@ namespace BookingApp.Model
         //    this.UncancellablePeriod = 1;
         //    this.Images = new List<Image>();
         //}
-        public Accommodation(string name, Location location, Enumeration.AccommodationType type, int maxGuests, int minReservation, int uncancellablePreriod)
+        public Accommodation(string name, Location location, Enumeration.AccommodationType type, int maxGuests, int minReservation, int uncancellablePreriod, User owner)
         {
             this.Name = name;
             this.Location = location;
@@ -43,8 +43,9 @@ namespace BookingApp.Model
             this.MinReservationDays = minReservation;
             this.UncancellablePeriod = uncancellablePreriod;
             this.Images = new List<Image>();
+            Owner = owner;
         }
-        public Accommodation(int id, string name, Location location, Enumeration.AccommodationType type, int maxGuests, int minReservation, int uncancellablePreriod)
+        public Accommodation(int id, string name, Location location, Enumeration.AccommodationType type, int maxGuests, int minReservation, int uncancellablePreriod,User owner)
         {
             this.Id = id;
             this.Name = name;
@@ -54,6 +55,7 @@ namespace BookingApp.Model
             this.MinReservationDays = minReservation;
             this.UncancellablePeriod = uncancellablePreriod;
             this.Images = new List<Image>();
+            this.Owner = owner;
         }
 
         public void FromCSV(string[] values)
@@ -65,10 +67,11 @@ namespace BookingApp.Model
             MaxGuests = Convert.ToInt32(values[4]);
             MinReservationDays = Convert.ToInt32(values[5]);
             UncancellablePeriod = Convert.ToInt32(values[6]);
+            Owner = new User() { Id = Convert.ToInt32(values[7]) };
         }
         public string[] ToCSV()
         {
-            string[] values = { Id.ToString(), Name.ToString(), Location.Id.ToString(), Type.ToString(), MaxGuests.ToString(), MinReservationDays.ToString(), UncancellablePeriod.ToString() };
+            string[] values = { Id.ToString(), Name.ToString(), Location.Id.ToString(), Type.ToString(), MaxGuests.ToString(), MinReservationDays.ToString(), UncancellablePeriod.ToString(),Owner.Id.ToString() };
             return values;
         }
     }
