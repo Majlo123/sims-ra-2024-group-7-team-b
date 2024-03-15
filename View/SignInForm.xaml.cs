@@ -70,18 +70,18 @@ namespace BookingApp.View
                     }
                     else if (User.Type == Enumeration.UserType.Guide)
 
-                    if (user.Type == Enumeration.UserType.Owner)
+                    if (User.Type == Enumeration.UserType.Owner)
                     {
-                        OwnerMainView ownerMainView = new OwnerMainView();
+                        OwnerMainView ownerMainView = new OwnerMainView(User);
                         ownerMainView.ShowDialog();
                     }
-                    if(user.Type == Enumeration.UserType.Guide)
+                    if(User.Type == Enumeration.UserType.Guide)
 
                     {
                         GuideMainView guideMainView = new GuideMainView();
                         guideMainView.ShowDialog();
                     }
-                    if(user.Type == Enumeration.UserType.Tourist) { 
+                    if(User.Type == Enumeration.UserType.Tourist) { 
                         TouristMainView touristMainView = new TouristMainView();
                             touristMainView.ShowDialog();
                         }

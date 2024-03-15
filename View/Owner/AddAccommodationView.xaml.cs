@@ -57,7 +57,8 @@ namespace BookingApp.View.Owner
 
         private void Register(object sender, RoutedEventArgs e)
         {
-            AccommodationDTO.Location = _locationRepository.Save(LocationDTO.ToLocation());
+            AccommodationDTO.LocationId = _locationRepository.Save(LocationDTO.ToLocation()).Id;
+            AccommodationDTO.MergedLocation = LocationDTO.FullLocation;
             ImageDTO.EntityId = _accommodationRepository.Save(AccommodationDTO.ToAccommodation()).Id;
             ImageDTO.Type = 0;
             foreach(string url in ImageUrls) 
