@@ -66,7 +66,7 @@
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Label VerticalContentAlignment="Center" Grid.Row="0" Grid.Column="0" Foreground="White">Name:</Label>
-                    <Label VerticalContentAlignment="Center" Grid.Row="1" Grid.Column="0" Foreground="White">Location (City | Country):</Label>
+                    <Label VerticalContentAlignment="Center" Grid.Row="1" Grid.Column="0" Foreground="White">Location (City,Country):</Label>
                     <Label VerticalContentAlignment="Center" Grid.Row="2" Grid.Column="0" Foreground="White">Accommodation Type:</Label>
                     <Label VerticalContentAlignment="Center" Grid.Row="3" Grid.Column="0" Foreground="White">Max. Guest Number:</Label>
                     <Label VerticalContentAlignment="Center" Grid.Row="4" Grid.Column="0" Foreground="White">Min. Reservation Days:</Label>
@@ -74,37 +74,44 @@
                     <Label VerticalContentAlignment="Center" Grid.Row="6" Grid.Column="0" Foreground="White">Images:</Label>
                     <Label VerticalContentAlignment="Center" Grid.Row="7" Grid.Column="0" Foreground="White"></Label>
 
-                    <TextBox Grid.Row="0" Grid.Column="1" Margin="5,5,5,5" Height="25" />
-                    <Grid Grid.Row="1" Grid.Column="1">
+                    <TextBox Grid.Row="0" Grid.Column="1" Margin="5,5,5,5" Height="25" Text="{Binding Path=AccommodationDTO.Name, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Grid Grid.Row="1" Grid.Column="1" RenderTransformOrigin="0.768,0.61">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <TextBox Margin="5,5,5,5" Grid.Column="0" Height="25" />
-                        <TextBox Margin="5,5,5,5" Grid.Column="1" Height="25" />
+                        <TextBox Margin="5,5,5,5" Grid.Column="0" Height="25" Text="{Binding Path=LocationDTO.FullLocation, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2"/>
                     </Grid>
-                    <ComboBox x:Name="cboTypes" Grid.Row="2" Grid.Column="1" Margin="5,5,5,5" DisplayMemberPath="Name" Height="25" />
-                    <TextBox Grid.Row="3" Grid.Column="1" Margin="5,5,5,5"  Height="25" />
-                    <TextBox Grid.Row="4" Grid.Column="1" Margin="5,5,5,5" Height="25" />
-                    <TextBox Grid.Row="5" Grid.Column="1" Margin="5,5,5,5"  Height="25" />
+                    <ComboBox x:Name="cboTypes" Grid.Row="2" Grid.Column="1" Margin="5,5,5,5" DisplayMemberPath="Name" Height="25" Text="{Binding Path=AccommodationDTO.Type, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="ChangeSelection">
+                        <ComboBoxItem>Apartment</ComboBoxItem>
+                        <ComboBoxItem>House</ComboBoxItem>
+                        <ComboBoxItem>Cottage</ComboBoxItem>
+                    </ComboBox>
+                    <TextBox Grid.Row="3" Grid.Column="1" Margin="5,5,5,5"  Height="25" Text="{Binding Path=AccommodationDTO.MaxGuests, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" Margin="5,5,5,5" Height="25" Text="{Binding Path=AccommodationDTO.MinReservationDays, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox Grid.Row="5" Grid.Column="1" Margin="5,5,5,5"  Height="25" Text="{Binding Path=AccommodationDTO.UncancellablePeriod, UpdateSourceTrigger=PropertyChanged}"/>
                     <Grid Grid.Row="6" Grid.Column="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
                         <WrapPanel Grid.Row="0" Margin="5,5,5,5" VerticalAlignment="Center">
-                            <TextBox x:Name="tbxImageUrls" HorizontalAlignment="Left" Height="25" Width="315" />
-                            <Button Content="To list"  HorizontalAlignment="Right" Height="25" Width="75"/>
+                            <TextBox x:Name="tbxImageUrls" HorizontalAlignment="Left" Height="25" Width="315" Text="{Binding Path=CurrentUrl, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Button Content="To list"  HorizontalAlignment="Right" Height="25" Width="75" Click="addToList"/>
                         </WrapPanel>
                         <WrapPanel Grid.Row="1" Margin="5,5,5,5" VerticalAlignment="Center">
-                            <ListBox Margin="5,5,5,5" Width="315" Height="150">
-                                
-                            </ListBox>
+
+                            <ScrollViewer Height="50" VerticalScrollBarVisibility="Auto" Margin="5">
+                                <ListBox Width="305" ItemsSource="{Binding ImageUrls}" Height="Auto">
+
+                                </ListBox>
+                            </ScrollViewer>
+
                         </WrapPanel>
                     </Grid>
                     <WrapPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" FlowDirection="RightToLeft" >
                         <Button Content="Cancel" HorizontalAlignment="Left" VerticalAlignment="Top" IsCancel="True" Height="25" Width="100" />
-                        <Button Content="Register" HorizontalAlignment="Left" VerticalAlignment="Top" IsDefault="True" Height="25" Width="100" />
+                        <Button Content="Register" HorizontalAlignment="Left" VerticalAlignment="Top" IsDefault="True" Height="25" Width="100" Click="Register" />
                     </WrapPanel>
                 </Grid>
 
