@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BookingApp.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,17 @@ namespace BookingApp.View.Owner
     /// </summary>
     public partial class OwnerMainView : Window
     {
-        public OwnerMainView()
+        public User User { get; set; }
+        public OwnerMainView(User user)
         {
+            this.User = user;
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            AddAccommodationView addAccommodationView = new AddAccommodationView(User);
+            addAccommodationView.ShowDialog();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace BookingApp.View
     /// </summary>
     public partial class SignInForm : Window
     {
-
+        public User User { get; set; }
         private readonly UserRepository _repository;
 
         private string _username;
@@ -46,20 +46,29 @@ namespace BookingApp.View
             InitializeComponent();
             DataContext = this;
             _repository = new UserRepository();
+            User = new User();
         }
 
         private void SignIn(object sender, RoutedEventArgs e)
         {
-            User user = _repository.GetByUsername(Username);
-            if (user != null)
+            User = _repository.GetByUsername(Username);
+            if (User != null)
             {
-                if(user.Password == txtPassword.Password)
+                if(User.Password == txtPassword.Password)
                 {
-                    if(user.Type == Enumeration.UserType.Guest)
+                    if(User.Type == Enumeration.UserType.Guest)
                     {
                         GuestMainView guestMainView = new GuestMainView();
                         guestMainView.ShowDialog();
                     }
+
+
+                    if (User.Type == Enumeration.UserType.Owner)
+                    {
+                        OwnerMainView ownerMainView = new OwnerMainView(User);
+                        ownerMainView.ShowDialog();
+                    }
+                    else if (User.Type == Enumeration.UserType.Guide)
 
                     if (user.Type == Enumeration.UserType.Owner)
                     {
@@ -67,6 +76,7 @@ namespace BookingApp.View
                         ownerMainView.ShowDialog();
                     }
                     if(user.Type == Enumeration.UserType.Guide)
+
                     {
                         GuideMainView guideMainView = new GuideMainView();
                         guideMainView.ShowDialog();

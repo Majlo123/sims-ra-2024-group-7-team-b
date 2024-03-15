@@ -75,7 +75,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <Label Content="Reservations To Grade:" Foreground="White" HorizontalAlignment="Left" Margin="10,24,0,0" VerticalAlignment="Top"/>
-                <Button Content="Add accommodation" HorizontalAlignment="Left" Margin="476,10,0,0" VerticalAlignment="Top"/>
+                <Button Content="Add accommodation" HorizontalAlignment="Left" Margin="476,10,0,0" VerticalAlignment="Top" Click="Button_Click"/>
 
             </Grid>
 
