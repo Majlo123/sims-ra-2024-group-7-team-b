@@ -46,7 +46,7 @@
                     Grid.Column="0"
                     Width="100"
                     Height="30"
-                    Content="Continue"></Button>
+                    Content="Continue" Click="ContinueButton_Click"></Button>
             <Button x:Name="CancelButton"
                     Grid.Column="1"
                     Width="100"
