@@ -17,8 +17,9 @@ namespace BookingApp.Model
 
         }
 
-        public Language(string name)
+        public Language(int id,string name)
         {
+            Id = id;
             Name = name;
         }
 
