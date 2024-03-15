@@ -26,16 +26,29 @@ namespace BookingApp.DTO
                 }
             }
         }
-        private Location location;
-        public Location Location
+        private int locationId;
+        public int LocationId
         {
-            get { return location; }
+            get { return locationId; }
             set
             {
-                if (value != location)
+                if (value != locationId)
                 {
-                    location = value;
-                    OnPropertyChanged(nameof(Location));
+                    locationId = value;
+                    OnPropertyChanged(nameof(LocationId));
+                }
+            }
+        }
+        private string mergedLocation;
+        public string MergedLocation
+        {
+            get { return mergedLocation; }
+            set
+            {
+                if (value != mergedLocation)
+                {
+                    mergedLocation = value;
+                    OnPropertyChanged(nameof(MergedLocation));
                 }
             }
         }
@@ -109,7 +122,8 @@ namespace BookingApp.DTO
         {
             Id = accommodation.Id;
             Name = accommodation.Name;
-            Location = accommodation.Location;
+            MergedLocation = accommodation.Location.City + ", " + accommodation.Location.Country;
+            LocationId = accommodation.Location.Id;
             MaxGuests = accommodation.MaxGuests;
             MinReservationDays = accommodation.MinReservationDays;
             UncancellablePeriod = accommodation.UncancellablePeriod;
@@ -117,7 +131,9 @@ namespace BookingApp.DTO
         }
         public Accommodation ToAccommodation()
         {
-            return new Accommodation(Id, name, location, type,  maxGuests, minReservationDays, uncancellablePeriod,owner);
+            string[] locationParts = MergedLocation.Replace(" ", string.Empty).Split(",");
+            
+            return new Accommodation(Id, name, new Location(LocationId, locationParts[1], locationParts[0]), type,  maxGuests, minReservationDays, uncancellablePeriod,owner);
         }
 
         protected virtual void OnPropertyChanged(string name)

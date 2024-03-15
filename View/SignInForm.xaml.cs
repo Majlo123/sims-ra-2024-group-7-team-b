@@ -8,6 +8,7 @@ using BookingApp.View.Guide;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using BookingApp.View.Tourist;
 
 namespace BookingApp.View
 {
@@ -61,16 +62,29 @@ namespace BookingApp.View
                         guestMainView.ShowDialog();
                     }
 
+
                     if (User.Type == Enumeration.UserType.Owner)
                     {
                         OwnerMainView ownerMainView = new OwnerMainView(User);
                         ownerMainView.ShowDialog();
                     }
                     else if (User.Type == Enumeration.UserType.Guide)
+
+                    if (user.Type == Enumeration.UserType.Owner)
+                    {
+                        OwnerMainView ownerMainView = new OwnerMainView();
+                        ownerMainView.ShowDialog();
+                    }
+                    if(user.Type == Enumeration.UserType.Guide)
+
                     {
                         GuideMainView guideMainView = new GuideMainView();
                         guideMainView.ShowDialog();
                     }
+                    if(user.Type == Enumeration.UserType.Tourist) { 
+                        TouristMainView touristMainView = new TouristMainView();
+                            touristMainView.ShowDialog();
+                        }
                 } 
                 else
                 {
@@ -85,3 +99,4 @@ namespace BookingApp.View
         }
     }
 }
+    
