@@ -1,37 +1,19 @@
 ﻿using BookingApp.DTO;
 using BookingApp.Model;
 using BookingApp.Repository;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace BookingApp.View.Tourist
 {
-    /// <summary>
-    /// Interaction logic for TouristMainView.xaml
-    /// </summary>
     public partial class TouristMainView : Window
     {
         public TourDTO SelectedTour { get; set; }
-
-
         public ObservableCollection<TourDTO> Tours { get; set; }
         public ObservableCollection<TourDTO> FilteredTours { get; set; }
-
         public ObservableCollection<LocationDTO> Locations { get; set; }
         public TourRepository TourRepository;
-
         private LocationRepository LocationRepository { get; set; }
 
         public TouristMainView()
@@ -43,9 +25,9 @@ namespace BookingApp.View.Tourist
             Locations = new ObservableCollection<LocationDTO>();
             LocationRepository = new LocationRepository();
             FilteredTours = new ObservableCollection<TourDTO>();
-            Update();
-
+            UpdateTours();
         }
+
         public void InitializeLocation()
         {
 
@@ -56,7 +38,7 @@ namespace BookingApp.View.Tourist
 
 
         }
-        public void Update()
+        public void UpdateTours()
         {
             Tours.Clear();
             foreach (Tour tour in TourRepository.GetAll())
@@ -71,65 +53,62 @@ namespace BookingApp.View.Tourist
 
         private void SearchClick(object sender, RoutedEventArgs e)
         {
-
-            string location = TextBoxLocation.Text.Trim();
-            string duration = TextBoxDuration.Text.Trim();
-            string language = TextBoxLanguage.Text.Trim();
-            int numGuests = 0;
-            int.TryParse(TextBoxNumGuest.Text.Trim(), out numGuests);
-
+            string locationInput = TextBoxLocation.Text.Trim().ToLower();
+            string durationInput = TextBoxDuration.Text.Trim();
+            string languageInput = TextBoxLanguage.Text.Trim().ToLower();
+            int numGuestsInput = int.TryParse(TextBoxNumGuest.Text.Trim(), out numGuestsInput) ? numGuestsInput : 0;
 
             FilteredTours.Clear();
             foreach (var tour in Tours)
             {
-
-                if (!string.IsNullOrEmpty(location) &&
-                    !tour.Location.ToString().ToLower().Contains(location.ToLower()))
-                {
+                if (!MatchesLocation(tour, locationInput))
                     continue;
-                }
 
-
-                if (!string.IsNullOrEmpty(duration) &&
-                    tour.Duration.ToString() != duration)
-                {
+                if (!string.IsNullOrEmpty(durationInput) && tour.Duration.ToString() != durationInput)
                     continue;
-                }
 
-
-                if (!string.IsNullOrEmpty(language) &&
-                    !tour.Language.ToString().ToLower().Contains(language.ToLower()))
-                {
+                if (!string.IsNullOrEmpty(languageInput) && !tour.Language.Name.ToLower().Contains(languageInput))
                     continue;
-                }
 
-
-                if (numGuests > 0 && numGuests > tour.MaxGuests)
-                {
+                if (numGuestsInput > 0 && numGuestsInput > tour.MaxGuests)
                     continue;
-                }
-
 
                 FilteredTours.Add(tour);
             }
 
-
             Table.ItemsSource = FilteredTours;
+        }
+
+        private bool MatchesLocation(TourDTO tour, string locationInput)
+        {
+            if (string.IsNullOrEmpty(locationInput))
+                return true;
+
+            string[] locationParts = locationInput.Split(',');
+            if (locationParts.Length != 2)
+                return false;
+
+            string city = locationParts[0].Trim().ToLower();
+            string country = locationParts[1].Trim().ToLower();
+
+            if (tour.Location == null)
+                return false;
+
+            string tourCity = tour.Location.City.Trim().ToLower();
+            string tourCountry = tour.Location.Country.Trim().ToLower();
+
+            return tourCity == city && tourCountry == country;
         }
 
         private void ReserveClick(object sender, RoutedEventArgs e)
         {
-            if (SelectedTour != null)
-            {
-
-
-            }
-            else
+            if (SelectedTour == null)
             {
                 MessageBox.Show("Please select a tour before making a reservation.");
+                return;
             }
+
+            // Implement reservation logic here
         }
-
-
     }
 }
