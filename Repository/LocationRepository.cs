@@ -29,22 +29,5 @@ namespace BookingApp.Repository
             List<Location> locations = GetAll();
             return locations.Find(l => l.Id == id);
         }
-        public int NextId()
-        {
-            _locations = _serializer.FromCSV(FilePath);
-            if (_locations.Count < 1)
-            {
-                return 1;
-            }
-            return _locations.Max(x => x.Id) + 1;
-        }
-        public Location Save(Location location)
-        {
-            location.Id = NextId();
-            _locations = _serializer.FromCSV(FilePath);
-            _locations.Add(location);
-            _serializer.ToCSV(FilePath, _locations);
-            return location;
-        }
     }
 }
