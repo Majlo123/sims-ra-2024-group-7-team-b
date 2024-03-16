@@ -150,7 +150,7 @@
                 <!-- Duration column -->
                 <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" />
                 <!-- Language column -->
-                <DataGridTextColumn Header="Language" Binding="{Binding Language}" />
+                <DataGridTextColumn Header="Language" Binding="{Binding Language.Name}" />
                 <!-- Description column -->
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
                 <!-- CheckPoints column -->

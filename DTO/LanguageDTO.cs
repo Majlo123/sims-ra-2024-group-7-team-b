@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BookingApp.DTO
 {
-    internal class LanguageDTO
+    public class LanguageDTO
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 

@@ -9,13 +9,21 @@ namespace BookingApp.View.Tourist
 {
     public partial class TouristMainView : Window
     {
-        public TourDTO SelectedTour { get; set; }
+
+        public TourDTO SelectedTour {  get; set; }
         public ObservableCollection<TourDTO> Tours { get; set; }
         public ObservableCollection<TourDTO> FilteredTours { get; set; }
         public ObservableCollection<LocationDTO> Locations { get; set; }
+
+        public ObservableCollection<LanguageDTO> Languages { get; set; }
+
         public TourRepository TourRepository;
         private LocationRepository LocationRepository { get; set; }
 
+        private LanguageRepository LanguageRepository { get; set; }
+        private TourDTO _selectedTour;
+
+       
         public TouristMainView()
         {
             InitializeComponent();
@@ -23,7 +31,9 @@ namespace BookingApp.View.Tourist
             TourRepository = new TourRepository();
             Tours = new ObservableCollection<TourDTO>();
             Locations = new ObservableCollection<LocationDTO>();
+            Languages = new ObservableCollection<LanguageDTO>();
             LocationRepository = new LocationRepository();
+            LanguageRepository = new LanguageRepository();
             FilteredTours = new ObservableCollection<TourDTO>();
             UpdateTours();
         }
@@ -38,6 +48,13 @@ namespace BookingApp.View.Tourist
 
 
         }
+        public void InitializeLanguage()
+        {
+            foreach(Language language in LanguageRepository.GetAll())
+            {
+                Languages.Add(new LanguageDTO(language));
+            }
+        }
         public void UpdateTours()
         {
             Tours.Clear();
@@ -45,7 +62,8 @@ namespace BookingApp.View.Tourist
             {
                 InitializeLocation();
                 tour.Location = LocationRepository.Get(tour.Location.Id);
-
+                InitializeLanguage();
+                tour.Language = LanguageRepository.Get(tour.Language.Id);
                 Tours.Add(new TourDTO(tour));
             }
 
@@ -76,9 +94,37 @@ namespace BookingApp.View.Tourist
                 FilteredTours.Add(tour);
             }
 
+            
+        }
+        void ResetLocation() {
+            FilteredTours.Clear();
+            foreach (var tour in Tours)
+            {
+                
+                if (SelectedTour==null||tour.Location.City != SelectedTour.Location.City || tour.MaxGuests==0)
+                    continue;
+                
+                FilteredTours.Add(tour);
+
+            }
+            
+            
+        }
+        void ClearEmptyTourSelection()
+        {
+            FilteredTours.Clear();
+            foreach (var tour in Tours)
+            {
+
+                if (tour.Location.City == SelectedTour.Location.City&&tour.MaxGuests == 0)
+                    continue;
+
+                FilteredTours.Add(tour);
+
+            }
+
             Table.ItemsSource = FilteredTours;
         }
-
         private bool MatchesLocation(TourDTO tour, string locationInput)
         {
             if (string.IsNullOrEmpty(locationInput))
@@ -99,16 +145,45 @@ namespace BookingApp.View.Tourist
 
             return tourCity == city && tourCountry == country;
         }
+        private bool TourEmptyCheck()
+        {
+            ResetLocation();
+            return FilteredTours.Count() == 0;
+        }
+
+
+
 
         private void ReserveClick(object sender, RoutedEventArgs e)
         {
             if (SelectedTour == null)
             {
-                MessageBox.Show("Please select a tour before making a reservation.");
+                MessageBox.Show("Please select a tour.");
                 return;
             }
 
-            // Implement reservation logic here
+            if (SelectedTour.MaxGuests == 0)
+            {
+                
+                if (!TourEmptyCheck())
+                {
+                    MessageBox.Show("The tour is full. Showing available tours in the same location.");
+                    Table.ItemsSource = FilteredTours;
+                    return;
+                }
+                else
+                {
+                    MessageBox.Show("The tour is full. There are no available tours in the same location.");
+                    ClearEmptyTourSelection();
+                    return;
+                }
+            }
+
+            TourReservationView tourReservationView = new TourReservationView(SelectedTour);
+            tourReservationView.ShowDialog();
         }
+
+
+
     }
 }
