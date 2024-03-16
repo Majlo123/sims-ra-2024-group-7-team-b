@@ -28,15 +28,6 @@ namespace BookingApp.Model
             EndDate = endDate;
             //Duration = EndDate.DayNumber - StartDate.DayNumber;
         }
-        public AccommodationReservation(int id,Accommodation accommodation, User user, DateOnly startDate, DateOnly endDate)
-        {
-            Id = id;
-            Accommodation = accommodation;
-            User = user;
-            StartDate = startDate;
-            EndDate = endDate;
-            //Duration = EndDate.DayNumber - StartDate.DayNumber;
-        }
 
         public string[] ToCSV()
         {
@@ -49,10 +40,8 @@ namespace BookingApp.Model
             Id = Convert.ToInt32(values[0]);
             Accommodation = new Accommodation() {Id = Convert.ToInt32(values[1])};
             User = new User() { Id = Convert.ToInt32(values[2])};
-            StartDate = DateOnly.Parse(values[3]);
-            //StartDate = DateOnly.ParseExact(values[3], "dd/MM/yyyy");
-            //EndDate = DateOnly.ParseExact(values[4], "dd/MM/yyyy");
-            EndDate = DateOnly.Parse(values[4]);
+            StartDate = DateOnly.ParseExact(values[3], "dd mm yyyy");
+            EndDate = DateOnly.ParseExact(values[4], "dd mm yyyy");
         }
     }
 }

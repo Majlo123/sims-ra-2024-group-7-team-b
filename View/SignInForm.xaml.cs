@@ -58,7 +58,7 @@ namespace BookingApp.View
                 {
                     if(User.Type == Enumeration.UserType.Guest)
                     {
-                        GuestMainView guestMainView = new GuestMainView(user);
+                        GuestMainView guestMainView = new GuestMainView();
                         guestMainView.ShowDialog();
                     }
 
