@@ -1,10 +1,14 @@
 ﻿using BookingApp.Model;
 using BookingApp.Repository;
 using BookingApp.View.Guest;
+
+using BookingApp.View.Owner;
 using BookingApp.View.Guide;
+
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using BookingApp.View.Tourist;
 
 namespace BookingApp.View
 {
@@ -13,7 +17,7 @@ namespace BookingApp.View
     /// </summary>
     public partial class SignInForm : Window
     {
-
+        public User User { get; set; }
         private readonly UserRepository _repository;
 
         private string _username;
@@ -42,11 +46,16 @@ namespace BookingApp.View
             InitializeComponent();
             DataContext = this;
             _repository = new UserRepository();
+            User = new User();
         }
 
         private void SignIn(object sender, RoutedEventArgs e)
         {
+
             User User = _repository.GetByUsername(Username);
+
+            User = _repository.GetByUsername(Username);
+
             if (User != null)
             {
                 if(User.Password == txtPassword.Password)
@@ -56,11 +65,21 @@ namespace BookingApp.View
                         GuestMainView guestMainView = new GuestMainView(User);
                         guestMainView.ShowDialog();
                     }
-                    else if(User.Type == Enumeration.UserType.Guide)
+                    
+                    if (User.Type == Enumeration.UserType.Owner)
+                    {
+                        OwnerMainView ownerMainView = new OwnerMainView(User);
+                        ownerMainView.ShowDialog();
+                    }
+                    if(User.Type == Enumeration.UserType.Guide)
                     {
                         GuideMainView guideMainView = new GuideMainView();
                         guideMainView.ShowDialog();
                     }
+                    if(User.Type == Enumeration.UserType.Tourist) { 
+                        TouristMainView touristMainView = new TouristMainView();
+                            touristMainView.ShowDialog();
+                        }
                 } 
                 else
                 {
@@ -75,3 +94,4 @@ namespace BookingApp.View
         }
     }
 }
+    
