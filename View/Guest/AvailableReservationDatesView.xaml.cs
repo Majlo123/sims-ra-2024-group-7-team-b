@@ -70,7 +70,7 @@ namespace BookingApp.View.Guest
             }
             else
             {
-                MessageBox.Show("You have to select one date before you press confirm");
+                MessageBox.Show("You must select one date before you press confirm");
             }
             
         }

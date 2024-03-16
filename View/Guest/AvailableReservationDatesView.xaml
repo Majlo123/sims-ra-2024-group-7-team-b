@@ -43,10 +43,15 @@
         <Button x:Name="ConfirmButton"
                 Content="Confirm"
                 Grid.Row="2"
-                Grid.Column="0" Click="ConfirmButton_Click"></Button>
+                Grid.Column="0" 
+                Click="ConfirmButton_Click"
+                Height="35px"
+                Width="70px"></Button>
         <Button x:Name="CancelButton"
                 Content="Cancel"
                 Grid.Row="2"
-                Grid.Column="1" Click="CancelButton_Click"></Button>
+                Grid.Column="1" Click="CancelButton_Click"
+                Height="35px"
+                Width="70px"></Button>
     </Grid>
 </Window>

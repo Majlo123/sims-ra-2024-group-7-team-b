@@ -45,12 +45,12 @@
             <Button x:Name="ContinueButton" 
                     Grid.Column="0"
                     Width="100"
-                    Height="30"
+                    Height="35"
                     Content="Continue" Click="ContinueButton_Click"></Button>
             <Button x:Name="CancelButton"
                     Grid.Column="1"
                     Width="100"
-                    Height="30"
+                    Height="35"
                     Content="Cancel" Click="CancelButton_Click"></Button>
         </Grid>
     </Grid>
