@@ -49,10 +49,13 @@ namespace BookingApp.View.Guest
 
         private void ContinueButton_Click(object sender, RoutedEventArgs e)
         {
+
             ReserveAccommodationView reserveView = new ReserveAccommodationView(accommodation, Guest);
             reserveView.Owner=this;
             reserveView.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             reserveView.ShowDialog();
+
+
         }
     }
 }
