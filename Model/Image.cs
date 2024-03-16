@@ -20,6 +20,13 @@ namespace BookingApp.Model
         {
             
         }
+        public Image(int id,string path, int entityId, Model.Enumeration.EntityType type)
+        {
+            Id = id;
+            Path = path;
+            EntityId = entityId;
+            Type = type;
+        }
         public Image(string path, int entityId, Model.Enumeration.EntityType type)
         {
             Path = path;

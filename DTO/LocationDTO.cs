@@ -36,6 +36,11 @@ namespace BookingApp.DTO
             Id = location.Id;
             FullLocation = location.City + ", " + location.Country;
         }
+        public Location ToLocation()
+        {
+            string[] splits = FullLocation.Split(',');
+            return new Location(splits[1], splits[0]);
+        }
         protected virtual void OnPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

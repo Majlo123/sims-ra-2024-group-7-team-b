@@ -31,8 +31,7 @@ namespace BookingApp.View.Guest
         private LocationRepository locationRepository { get; set; }
 
         private AccommodationRepository accommodationRepository { get; set; }
-        public User Guest { get; set; }
-        public GuestMainView(User user)
+        public GuestMainView()
         {
             InitializeComponent();
             DataContext = this;
@@ -40,7 +39,6 @@ namespace BookingApp.View.Guest
             locations = new ObservableCollection<LocationDTO>();
             locationRepository = new LocationRepository();
             accommodationRepository = new AccommodationRepository();
-            Guest = user;
             InitializeLocation();
             Update();
         }
@@ -158,7 +156,7 @@ namespace BookingApp.View.Guest
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
         {
-            AccommodationDetailsView detail = new AccommodationDetailsView(selectedAccommodation, Guest);
+            AccommodationDetailsView detail = new AccommodationDetailsView(selectedAccommodation);
             detail.Owner = this;
             detail.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             detail.Show();

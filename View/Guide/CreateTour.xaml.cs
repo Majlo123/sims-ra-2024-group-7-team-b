@@ -1,4 +1,5 @@
-﻿using BookingApp.Repository;
+﻿using BookingApp.Model;
+using BookingApp.Repository;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Image = BookingApp.Model.Image;
 
 namespace BookingApp.View.Guide
 {
@@ -22,11 +24,21 @@ namespace BookingApp.View.Guide
     public partial class CreateTour : Window
     {
         private readonly TourRepository _tourRepository;
-        //private readonly CheckPoint
+        private readonly CheckPointRepository _checkPointRepository;
         private readonly TourTimeRepository _tourTimeRepository;
         private readonly LocationRepository _locationRepository;
 
+        public User LoggedInUser { get; set; }
         public ObservableCollection<Image> Images { get; set; }
+        private string _name;
+        private Location _location;
+        private string _description;
+        private Language _language;
+        private int _maxGuests;
+        private CheckPoint _checkPoint;
+        private TourTime _tourTime;
+        private double _duration;
+
         public CreateTour()
         {
             InitializeComponent();
