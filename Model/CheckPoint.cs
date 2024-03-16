@@ -26,14 +26,6 @@ namespace BookingApp.Model
             TourId = tourId;
         }
 
-        public CheckPoint(int id,int order, string name, int tourId)
-        {
-            Id=id;
-            Order = order;
-            Name = name;
-            TourId = tourId;
-        }
-
         public string[] ToCSV()
         {
             string[] values = { Id.ToString(), Order.ToString(), Name, TourId.ToString() };
