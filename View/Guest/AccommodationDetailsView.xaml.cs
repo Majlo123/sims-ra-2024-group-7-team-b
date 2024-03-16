@@ -1,5 +1,4 @@
 ﻿using BookingApp.DTO;
-using BookingApp.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,14 +21,13 @@ namespace BookingApp.View.Guest
     public partial class AccommodationDetailsView : Window
     {
         AccommodationDTO accommodation {  get; set; }
-        public User Guest { get; set; }
-        public AccommodationDetailsView(AccommodationDTO selected, User user)
+        public AccommodationDetailsView(AccommodationDTO selected)
         {
             InitializeComponent();
             DataContext = this;
             accommodation = selected;
-            Guest = user;
             Initialize();
+
         }
 
         public void Initialize()
@@ -49,7 +47,7 @@ namespace BookingApp.View.Guest
 
         private void ContinueButton_Click(object sender, RoutedEventArgs e)
         {
-            ReserveAccommodationView reserve = new ReserveAccommodationView(accommodation, Guest);
+            ReserveAccommodationView reserve = new ReserveAccommodationView(accommodation);
             reserve.Owner=this;
             reserve.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             reserve.ShowDialog();
