@@ -46,17 +46,17 @@ namespace BookingApp.View
 
         private void SignIn(object sender, RoutedEventArgs e)
         {
-            User user = _repository.GetByUsername(Username);
-            if (user != null)
+            User User = _repository.GetByUsername(Username);
+            if (User != null)
             {
-                if(user.Password == txtPassword.Password)
+                if(User.Password == txtPassword.Password)
                 {
-                    if(user.Type == Enumeration.UserType.Guest)
+                    if(User.Type == Enumeration.UserType.Guest)
                     {
-                        GuestMainView guestMainView = new GuestMainView(user);
+                        GuestMainView guestMainView = new GuestMainView(User);
                         guestMainView.ShowDialog();
                     }
-                    else if(user.Type == Enumeration.UserType.Guide)
+                    else if(User.Type == Enumeration.UserType.Guide)
                     {
                         GuideMainView guideMainView = new GuideMainView();
                         guideMainView.ShowDialog();
