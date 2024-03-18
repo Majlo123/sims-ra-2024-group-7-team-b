@@ -74,69 +74,83 @@ namespace BookingApp.View.Guest
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            string name = NameTextBox.Text;
-            List<Model.Enumeration.AccommodationType> types = GetSuitableTypes();
-
-            int locationId = selectedLocation.Id;
-            int maxGuests;
-            if(int.TryParse(MaxGuestsTextBox.Text, out maxGuests) == false)
-            {
-                maxGuests = -1;
-            }
-            int lenghtOfStay;
-            if(int.TryParse(LenghtOfStayTextBox.Text, out lenghtOfStay) == false)
-            {
-                lenghtOfStay = -1;
-            }
+            SearchAccommodationParams searchParams = new SearchAccommodationParams();
             accommodations.Clear();
-            foreach(Accommodation accommodation in GetSuitableAccommodations(name, types, locationId, maxGuests, lenghtOfStay)) 
+            foreach(Accommodation accommodation in GetSuitableAccommodations(searchParams)) 
             {
                 accommodation.Location = locationRepository.Get(accommodation.Location.Id);
                 accommodations.Add(new AccommodationDTO(accommodation));
             }
             
         }
-        private List<Accommodation> GetSuitableAccommodations(string name, List<Model.Enumeration.AccommodationType> types, int locationId, int maxGuests, int lenghtOfStay)
+        private SearchAccommodationParams GetSearchAccommodationParams()
+        {
+            int maxGuests;
+            if (int.TryParse(MaxGuestsTextBox.Text, out maxGuests) == false)
+            {
+                maxGuests = -1;
+            }
+            int lenghtOfStay;
+            if (int.TryParse(LenghtOfStayTextBox.Text, out lenghtOfStay) == false)
+            {
+                lenghtOfStay = -1;
+            }
+            return new SearchAccommodationParams(NameTextBox.Text, GetSuitableTypes(), selectedLocation.Id, maxGuests, lenghtOfStay);
+        }
+
+        private List<Accommodation> GetSuitableAccommodations(SearchAccommodationParams searchParams)
         {
             List<Accommodation> suitableAccommodations = new List<Accommodation>();
             foreach (Accommodation accommodation in accommodationRepository.GetAll())
             {
-                if(IsAccommodationSuitable(accommodation, name, types, locationId, maxGuests, lenghtOfStay))
+                if(IsAccommodationSuitable(accommodation, searchParams))
                 {
                     suitableAccommodations.Add(accommodation);
                 }
-                
             }
-
             return suitableAccommodations;
         }
 
-        private bool IsAccommodationSuitable(Accommodation accommodation, string name, List<Model.Enumeration.AccommodationType> types, int locationId, int maxGuests, int lenghtOfStay)
+        private bool IsAccommodationSuitable(Accommodation accommodation, SearchAccommodationParams searchParams)
         {
-            if ((!types.Contains(accommodation.Type)) && types.Count != 0)
-            { 
-                return false;
-            }
-            if((!(accommodation.Name.ToLower().Contains(name.ToLower()))) && name != "")
-            { 
-                return false; 
-            }
-            if(locationId != -1  && locationId!= accommodation.Location.Id)
-            {
-                MessageBox.Show(locationId.ToString() +" " + accommodation.Location.Id.ToString());
-                return false;
-            }
-            if(maxGuests != -1 && maxGuests <  accommodation.MaxGuests)
-            { 
-                return false;
-            }
-            if(lenghtOfStay != -1 && lenghtOfStay < accommodation.MinReservationDays)
+            if (!IsTypeSuitable(accommodation, searchParams.Types) ||
+                !IsNameSuitable(accommodation, searchParams.Name) ||
+                !IsLocationSuitable(accommodation, searchParams.LocationId) ||
+                !IsMaxGuestsSuitable(accommodation, searchParams.MaxGuests) ||
+                !IsLengthOfStaySuitable(accommodation, searchParams.StayLength))
             {
                 return false;
             }
 
             return true;
         }
+
+        private bool IsTypeSuitable(Accommodation accommodation, List<Model.Enumeration.AccommodationType> types)
+        {
+            return (types.Count == 0 || types.Contains(accommodation.Type));
+        }
+
+        private bool IsNameSuitable(Accommodation accommodation, string name)
+        {
+            return (string.IsNullOrEmpty(name) || accommodation.Name.ToLower().Contains(name.ToLower()));
+        }
+
+        private bool IsLocationSuitable(Accommodation accommodation, int locationId)
+        {
+            return (locationId == -1 || locationId == accommodation.Location.Id);
+        }
+
+        private bool IsMaxGuestsSuitable(Accommodation accommodation, int maxGuests)
+        {
+            return (maxGuests == -1 || maxGuests <= accommodation.MaxGuests);
+        }
+
+        private bool IsLengthOfStaySuitable(Accommodation accommodation, int lengthOfStay)
+        {
+            return (lengthOfStay == -1 || lengthOfStay >= accommodation.MinReservationDays);
+        }
+
+
         private List<Model.Enumeration.AccommodationType> GetSuitableTypes()
         {
             List<Model.Enumeration.AccommodationType> types = new List<Enumeration.AccommodationType>();
@@ -154,7 +168,7 @@ namespace BookingApp.View.Guest
             }
 
             return types;
-        }
+         }
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
         {
