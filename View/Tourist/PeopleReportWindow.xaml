@@ -7,9 +7,67 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="PeopleReportWindow" Height="768" Width="1024">
+    <Window.Resources>
+        <!-- Define custom colors -->
+        <Color x:Key="PrimaryColor">#2196F3</Color>
+        <Color x:Key="SecondaryColor">#FFC107</Color>
+        <Color x:Key="BackgroundColor">#F5F5F5</Color>
+        <Color x:Key="ButtonColor">#4CAF50</Color>
+        <Color x:Key="TextColor">#212121</Color>
+
+        <!-- Define custom brushes using the colors -->
+        <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}" />
+        <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource SecondaryColor}" />
+        <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}" />
+        <SolidColorBrush x:Key="ButtonBrush" Color="{StaticResource ButtonColor}" />
+        <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextColor}" />
+
+        <!-- Define custom styles for buttons -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource ButtonBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource BackgroundBrush}" />
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+                    <Setter Property="Background" Value="{StaticResource SecondaryBrush}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Define custom style for Labels -->
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <!-- Define custom style for TextBoxes -->
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <!-- Row for navigation buttons -->
+            <RowDefinition Height="Auto" />
+            <!-- Row for guest number label -->
             <RowDefinition Height="Auto" />
             <!-- Row for person's details -->
             <RowDefinition Height="*" />
@@ -21,8 +79,13 @@
             <Button Content="Next" Click="NextClick" Margin="5"/>
         </StackPanel>
 
+        <!-- Guest number label -->
+        <!-- Guest number label -->
+        <Label Grid.Row="1" Content="{Binding CurrentGuestLabel, RelativeSource={RelativeSource AncestorType=local:PeopleReportWindow}}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+
         <!-- Person's details -->
-        <StackPanel Grid.Row="1" Margin="10">
+        <StackPanel Grid.Row="2" Margin="10">
             <TextBlock Text="Name:" FontWeight="Bold"/>
             <TextBox x:Name="TextBoxFirstName" Margin="0 5 0 10"/>
             <TextBlock Text="Surname:" FontWeight="Bold"/>

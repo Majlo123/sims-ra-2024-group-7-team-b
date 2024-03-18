@@ -1,19 +1,33 @@
 ﻿using BookingApp.DTO;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Windows;
 
 namespace BookingApp.View.Tourist
 {
-    public partial class PeopleReportWindow : Window
+    public partial class PeopleReportWindow : Window, INotifyPropertyChanged
     {
         public event EventHandler<List<string>> GuestDataUpdated;
-
+        public event PropertyChangedEventHandler PropertyChanged;
         private List<string> guestNames;
         private int currentGuestIndex = 0;
         private TourDTO SelectedTour { get; set; }
         private string csvFilePath = "../../../Resources/Data/tour.csv";
+        private string currentGuestLabel;
+        public string CurrentGuestLabel
+        {
+            get { return currentGuestLabel; }
+            set
+            {
+                if (currentGuestLabel != value)
+                {
+                    currentGuestLabel = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CurrentGuestLabel"));
+                }
+            }
+        }
 
         public PeopleReportWindow(List<string> guests, TourDTO selectedTour)
         {
@@ -76,6 +90,7 @@ namespace BookingApp.View.Tourist
                     TextBoxFirstName.Text = nameParts.Length > 0 ? nameParts[0] : "";
                     TextBoxLastName.Text = nameParts.Length > 1 ? nameParts[1] : "";
                     TextBoxAge.Text = parts[1].Split(':')[1].Trim();
+                    CurrentGuestLabel = $"Guest {currentGuestIndex + 1}";
                 }
                 else
                 {
@@ -86,10 +101,12 @@ namespace BookingApp.View.Tourist
             {
                 ResetTextBoxes();
             }
+
         }
 
         private void ResetTextBoxes()
         {
+            CurrentGuestLabel = $"Guest {currentGuestIndex + 1}";
             TextBoxFirstName.Text = "";
             TextBoxLastName.Text = "";
             TextBoxAge.Text = "";
