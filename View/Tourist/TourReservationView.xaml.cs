@@ -1,5 +1,6 @@
 ﻿using BookingApp.DTO;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 
@@ -8,7 +9,7 @@ namespace BookingApp.View.Tourist
     public partial class TourReservationView : Window
     {
         private TourDTO SelectedTour { get; set; }
-        private string csvFilePath = "../../../Resources/Data/tour.csv";
+       
 
         public TourReservationView(TourDTO selectedTour)
         {
@@ -38,37 +39,17 @@ namespace BookingApp.View.Tourist
                 return;
             }
 
-            MessageBox.Show($"Tour successfully reserved for {numberOfGuests} guests!");
+            List<string> guestNames = new List<string>();
+            for (int i = 0; i < numberOfGuests; i++)
+            {
+                guestNames.Add("Guest " + (i + 1)); // Primer imena gosta
+            }
 
-            SelectedTour.MaxGuests -= numberOfGuests;
-            UpdateCsvFile(SelectedTour.Id, SelectedTour.MaxGuests);
+            PeopleReportWindow peopleReportWindow = new PeopleReportWindow(guestNames,SelectedTour);
+            peopleReportWindow.ShowDialog();
 
             this.Close();
         }
 
-        private void UpdateCsvFile(int tourId, int newMaxGuests)
-        {
-            string tempFile = Path.GetTempFileName();
-            using (var reader = new StreamReader(csvFilePath))
-            using (var writer = new StreamWriter(tempFile))
-            {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    string[] parts = line.Split('|');
-                    
-                    
-                        if (parts[0] == tourId.ToString())
-                        {
-                            parts[5] = newMaxGuests.ToString();
-                            line = string.Join("|", parts);
-                        }
-                    
-                    writer.WriteLine(line);
-                }
-            }
-            File.Delete(csvFilePath);
-            File.Move(tempFile, csvFilePath);
-        }
     }
 }

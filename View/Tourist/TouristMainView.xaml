@@ -62,7 +62,6 @@
             <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
 
-        <!-- Define custom style for DataGrid -->
         <Style TargetType="DataGrid">
             <Setter Property="Margin" Value="10" />
             <Setter Property="IsTextSearchEnabled" Value="True" />
@@ -71,19 +70,27 @@
             <Setter Property="SelectedItem" Value="{Binding Path=selectedTour, UpdateSourceTrigger=PropertyChanged}" />
             <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
             <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
-            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
-            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderThickness" Value="0" />
+            <!-- Remove border -->
+            <Setter Property="RowHeight" Value="30" />
+            <!-- Increase row height -->
+            <Setter Property="FontSize" Value="14" />
+            <!-- Increase font size -->
+            <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
         </Style>
 
-        <!-- Define custom style for DataGrid columns -->
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="{StaticResource PrimaryBrush}" />
             <Setter Property="Foreground" Value="{StaticResource BackgroundBrush}" />
             <Setter Property="Padding" Value="10" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="14" />
+            <!-- Increase font size -->
         </Style>
-
+        
+        
     </Window.Resources>
     <Grid Background="{StaticResource BackgroundBrush}">
         <Grid.RowDefinitions>
@@ -123,13 +130,7 @@
             <!-- Columns -->
             <DataGrid.Columns>
                 <!-- Image column -->
-                <DataGridTemplateColumn Header="Image" Width="Auto">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Image Source="{Binding Cover.Url}" Width="100" Height="100" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+             
                 <!-- Name column -->
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
                 <!-- Location column -->
@@ -154,33 +155,10 @@
                 <!-- Description column -->
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
                 <!-- CheckPoints column -->
-                <DataGridTemplateColumn Header="CheckPoints" Width="Auto">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <ItemsControl ItemsSource="{Binding CheckPoints}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Location}" />
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                
+                               
                 <!-- TourTime column -->
-                <DataGridTemplateColumn Header="TourTime" Width="Auto">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <ItemsControl ItemsSource="{Binding TourTime}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Date}" />
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                
                 <!-- MaxGuests column -->
                 <DataGridTextColumn Header="MaxGuests" Binding="{Binding MaxGuests}" />
             </DataGrid.Columns>

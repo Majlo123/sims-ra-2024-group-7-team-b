@@ -71,6 +71,7 @@ namespace BookingApp.View.Tourist
 
         private void SearchClick(object sender, RoutedEventArgs e)
         {
+            UpdateTours();
             string locationInput = TextBoxLocation.Text.Trim().ToLower();
             string durationInput = TextBoxDuration.Text.Trim();
             string languageInput = TextBoxLanguage.Text.Trim().ToLower();
@@ -93,8 +94,9 @@ namespace BookingApp.View.Tourist
 
                 FilteredTours.Add(tour);
             }
+            Table.ItemsSource = FilteredTours;
 
-            
+
         }
         void ResetLocation() {
             FilteredTours.Clear();
@@ -112,14 +114,18 @@ namespace BookingApp.View.Tourist
         }
         void ClearEmptyTourSelection()
         {
+            
+            
             FilteredTours.Clear();
+            
             foreach (var tour in Tours)
             {
-
-                if (tour.Location.City == SelectedTour.Location.City&&tour.MaxGuests == 0)
+                if(tour.Location.City != SelectedTour.Location.City && tour.MaxGuests != 0)
+                    FilteredTours.Add(tour);
+                else
                     continue;
 
-                FilteredTours.Add(tour);
+               
 
             }
 
@@ -145,11 +151,7 @@ namespace BookingApp.View.Tourist
 
             return tourCity == city && tourCountry == country;
         }
-        private bool TourEmptyCheck()
-        {
-            ResetLocation();
-            return FilteredTours.Count() == 0;
-        }
+        
 
 
 
@@ -164,8 +166,8 @@ namespace BookingApp.View.Tourist
 
             if (SelectedTour.MaxGuests == 0)
             {
-                
-                if (!TourEmptyCheck())
+                ResetLocation();
+                if (FilteredTours.Count() != 0)
                 {
                     MessageBox.Show("The tour is full. Showing available tours in the same location.");
                     Table.ItemsSource = FilteredTours;
