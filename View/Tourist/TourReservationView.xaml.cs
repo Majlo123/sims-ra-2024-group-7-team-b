@@ -42,7 +42,7 @@ namespace BookingApp.View.Tourist
             List<string> guestNames = new List<string>();
             for (int i = 0; i < numberOfGuests; i++)
             {
-                guestNames.Add("Guest " + (i + 1)); // Primer imena gosta
+                guestNames.Add("Guest " + (i + 1)); 
             }
 
             PeopleReportWindow peopleReportWindow = new PeopleReportWindow(guestNames,SelectedTour);
