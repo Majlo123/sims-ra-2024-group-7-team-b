@@ -22,13 +22,14 @@ namespace BookingApp.View.Guest
     /// </summary>
     public partial class ReserveAccommodationView : Window
     {
-        public DateOnly ReservationStart {  get; set; }
-        public DateOnly ReservationEnd {  get; set; }
+        public DateTime ReservationStart {  get; set; }
+        public DateTime ReservationEnd {  get; set; }
         public List<DateOnly> StartCandidates { get; set; }
         public List<DateOnly> EndCandidates { get; set; }
         private AccommodationReservationRepository ReservationRepository { get; set; }
         public List<AccommodationReservation> PreviousReservations {  get; set; }
         public Accommodation SelectedAccommodation { get; set; }
+        public int length;
         public User Guest {  get; set; }
         public ReserveAccommodationView(AccommodationDTO accommodation, User user)
         {
@@ -46,24 +47,27 @@ namespace BookingApp.View.Guest
             Close();
         }
 
-        private void ConfirmButton_Click(object sender, RoutedEventArgs e)
+        private void PrepareData()
         {
             StartCandidates.Clear();
             EndCandidates.Clear();
-            PreviousReservations = ReservationRepository.GetByAccommodation(SelectedAccommodation);
             DateOnly startDate = DateOnly.Parse(StartDateTextBox.Text);
-            DateTime start = startDate.ToDateTime(TimeOnly.Parse("10:00PM"));
             DateOnly endDate = DateOnly.Parse(EndDateTextBox.Text);
-            DateTime end = endDate.ToDateTime(TimeOnly.Parse("10:00PM"));
-            int length = Convert.ToInt32(StayLengthTextBox.Text);
+            ReservationStart = startDate.ToDateTime(TimeOnly.Parse("10:00PM"));
+            ReservationEnd = endDate.ToDateTime(TimeOnly.Parse("10:00PM"));
+            length = Convert.ToInt32(StayLengthTextBox.Text);
+            PreviousReservations = ReservationRepository.GetByAccommodation(SelectedAccommodation);
+        }
+        private void ConfirmButton_Click(object sender, RoutedEventArgs e)
+        {
+            PrepareData();
             string message;
-            if(CheckUserInput(start, end, length))
+            if(CheckUserInput(ReservationStart, ReservationEnd, length))
             {
-                TimeSpan unavailablePeriod = start.AddDays(length) - start;
-                if (!FindFreeDatesInRange(start, end, length, unavailablePeriod))
+                
+                if (!FindFreeDatesInRange(ReservationStart, ReservationEnd, length))
                 {
-                    MessageBox.Show("Nisam nasao  u range");
-                    FindDatesOutRange(start, end, length, unavailablePeriod);
+                    FindDatesOutRange(ReservationStart, length);
                     message = "No Available Dates in the period you chose, here are some other free dates outside the period you chose";
                 }
                 else
@@ -77,19 +81,15 @@ namespace BookingApp.View.Guest
                     ReservationRepository.Save(new AccommodationReservation(SelectedAccommodation, Guest, availableReservationDatesView.ChosenStart, availableReservationDatesView.ChosenEnd));
                 }
             }
-
         }
-
-        private bool FindFreeDatesInRange(DateTime start, DateTime end, int length, TimeSpan period)
+        private bool FindFreeDatesInRange(DateTime start, DateTime end, int length)
         {
-            //DateTime[] datesBetween = Enumerable.Range(0, 1 + end.Subtract(start).Days).Select(offset => start.AddDays(offset)).ToArray();
             bool notFree = false;
-            while (start != end.Subtract(period).AddDays(1))
+            while (start != end.AddDays(-(length - 1)))
             {
                 foreach(AccommodationReservation reservation in PreviousReservations)
                 {
-                    
-                    notFree = IsDateFree(start, end, length, reservation);
+                    notFree = IsDateFree(start, length, reservation);
                     if (notFree)
                     {
                         break;
@@ -103,33 +103,20 @@ namespace BookingApp.View.Guest
                 notFree= false;
                 start = start.AddDays(1);
             }
-            if(StartCandidates.Count > 10)
-            {
-                StartCandidates.RemoveRange(10, StartCandidates.Count - 10);
-                EndCandidates.RemoveRange(10, EndCandidates.Count - 10);
-            }
             return StartCandidates.Count > 0;
         }
-        private void FindDatesOutRange(DateTime start,DateTime end, int length, TimeSpan unavailablePeriod)
+        
+        private void FindDatesOutRange(DateTime start, int length)
         {
-            //if((start - DateTime.Now).Days > length)
-            //{
-            //    FindFreeDatesInRange(DateTime.Now, start, length, unavailablePeriod);
-            //    start = end.Subtract(unavailablePeriod);
-            //}
-            
             while (StartCandidates.Count < 5)
             {
-                //DateTime endDate = start.AddDays(30);
-                MessageBox.Show("Trazim van");
-                bool x = FindFreeDatesInRange(start, start.AddDays(20), length, unavailablePeriod);
-                start = start.AddDays(20 - length);
+                FindFreeDatesInRange(start, start.AddDays(30), length);
+                start = start.AddDays(30 - length);
             }
             if(StartCandidates.Count > 5) {
                 StartCandidates.RemoveRange(5, StartCandidates.Count - 5);
                 EndCandidates.RemoveRange(5, EndCandidates.Count - 5);
-            }
-            
+            } 
         }
         private bool CheckUserInput(DateTime start,  DateTime end, int length)
         {
@@ -150,24 +137,27 @@ namespace BookingApp.View.Guest
             }
             return true;
         }
-        private bool IsDateFree(DateTime start, DateTime end, int length, AccommodationReservation reservation)
+        private bool IsDateFree(DateTime start, int length, AccommodationReservation reservation)
         {
-            if (start <= reservation.EndDate.ToDateTime(TimeOnly.Parse("10:00PM")) && start >= reservation.StartDate.ToDateTime(TimeOnly.Parse("10:00PM")))
-            {
-                return true;
-                
-            }
-            else if (start.AddDays(length) >= reservation.StartDate.ToDateTime(TimeOnly.Parse("10:00PM")) && start.AddDays(length) <= reservation.EndDate.ToDateTime(TimeOnly.Parse("10:00PM")))
-            {
-                return true;
-                
-            }
-            else if (start <= reservation.StartDate.ToDateTime(TimeOnly.Parse("10:00PM")) && start.AddDays(length) >= reservation.EndDate.ToDateTime(TimeOnly.Parse("10:00PM")))
-            {
-                return true;
-               
-            }
-            return false;
+            return IsOverlap(start, length, reservation);
         }
+
+        private bool IsOverlap(DateTime start, int length, AccommodationReservation reservation)
+        {
+            DateTime reservationStartDate = reservation.StartDate.ToDateTime(TimeOnly.Parse("10:00PM"));
+            DateTime reservationEndDate = reservation.EndDate.ToDateTime(TimeOnly.Parse("10:00PM"));
+
+            
+            return (IsWithinRange(start, reservationStartDate, reservationEndDate) ||
+                    IsWithinRange(start.AddDays(length), reservationStartDate, reservationEndDate) ||
+                    (start < reservationStartDate && start.AddDays(length) > reservationEndDate));
+        }
+
+        private bool IsWithinRange(DateTime dateCandidate, DateTime start, DateTime end)
+        {
+            return (dateCandidate >= start && dateCandidate <= end);
+        }
+
+
     }
 }
