@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Windows;
 
 namespace BookingApp.View.Tourist
@@ -11,10 +12,12 @@ namespace BookingApp.View.Tourist
     {
         public event EventHandler<List<string>> GuestDataUpdated;
         public event PropertyChangedEventHandler PropertyChanged;
+
         private List<string> guestNames;
         private int currentGuestIndex = 0;
         private TourDTO SelectedTour { get; set; }
-        private string csvFilePath = "../../../Resources/Data/tour.csv";
+        private readonly string csvFilePath = "../../../Resources/Data/tour.csv";
+
         private string currentGuestLabel;
         public string CurrentGuestLabel
         {
@@ -24,7 +27,7 @@ namespace BookingApp.View.Tourist
                 if (currentGuestLabel != value)
                 {
                     currentGuestLabel = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CurrentGuestLabel"));
+                    OnPropertyChanged(nameof(CurrentGuestLabel));
                 }
             }
         }
@@ -32,7 +35,7 @@ namespace BookingApp.View.Tourist
         public PeopleReportWindow(List<string> guests, TourDTO selectedTour)
         {
             InitializeComponent();
-            guestNames = guests;
+            guestNames = guests ?? new List<string>();
             SelectedTour = selectedTour;
             ResetTextBoxes();
             DisplayCurrentGuestData();
@@ -41,32 +44,13 @@ namespace BookingApp.View.Tourist
         private void NextClick(object sender, RoutedEventArgs e)
         {
             SaveCurrentGuestData();
-
-            currentGuestIndex++;
-            if (currentGuestIndex >= guestNames.Count)
-            {
-                MessageBox.Show("All guests have been reviewed.");
-                GuestDataUpdated?.Invoke(this, guestNames);
-                UpdateTourCapacity();
-                Close();
-                return;
-            }
-
-            DisplayCurrentGuestData();
+            MoveToNextGuest();
         }
 
         private void PreviousClick(object sender, RoutedEventArgs e)
         {
             SaveCurrentGuestData();
-
-            currentGuestIndex--;
-            if (currentGuestIndex < 0)
-            {
-                MessageBox.Show("You are already on the first guest.");
-                return;
-            }
-
-            DisplayCurrentGuestData();
+            MoveToPreviousGuest();
         }
 
         private void SaveCurrentGuestData()
@@ -87,8 +71,8 @@ namespace BookingApp.View.Tourist
                 if (parts.Length >= 2 && parts[1].Contains(":"))
                 {
                     string[] nameParts = parts[0].Split(' ');
-                    TextBoxFirstName.Text = nameParts.Length > 0 ? nameParts[0] : "";
-                    TextBoxLastName.Text = nameParts.Length > 1 ? nameParts[1] : "";
+                    TextBoxFirstName.Text = nameParts.ElementAtOrDefault(0) ?? "";
+                    TextBoxLastName.Text = nameParts.ElementAtOrDefault(1) ?? "";
                     TextBoxAge.Text = parts[1].Split(':')[1].Trim();
                     CurrentGuestLabel = $"Guest {currentGuestIndex + 1}";
                 }
@@ -101,7 +85,34 @@ namespace BookingApp.View.Tourist
             {
                 ResetTextBoxes();
             }
+        }
 
+        private void MoveToNextGuest()
+        {
+            currentGuestIndex++;
+            if (currentGuestIndex >= guestNames.Count)
+            {
+                MessageBox.Show("All guests have been reviewed.");
+                GuestDataUpdated?.Invoke(this, guestNames);
+                UpdateTourCapacity();
+                Close();
+                return;
+            }
+
+            DisplayCurrentGuestData();
+        }
+
+        private void MoveToPreviousGuest()
+        {
+            currentGuestIndex--;
+            if (currentGuestIndex < 0)
+            {
+                MessageBox.Show("You are already on the first guest.");
+                currentGuestIndex++;
+                return;
+            }
+
+            DisplayCurrentGuestData();
         }
 
         private void ResetTextBoxes()
@@ -145,6 +156,11 @@ namespace BookingApp.View.Tourist
         {
             File.Delete(csvFilePath);
             File.Move(tempFile, csvFilePath);
+        }
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

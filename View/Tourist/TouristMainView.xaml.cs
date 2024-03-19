@@ -4,6 +4,7 @@ using BookingApp.Repository;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Documents;
 
 namespace BookingApp.View.Tourist
 {
@@ -21,7 +22,7 @@ namespace BookingApp.View.Tourist
         private LocationRepository LocationRepository { get; set; }
 
         private LanguageRepository LanguageRepository { get; set; }
-        private TourDTO _selectedTour;
+        
 
        
         public TouristMainView()
@@ -69,6 +70,52 @@ namespace BookingApp.View.Tourist
 
         }
 
+        private ObservableCollection<TourDTO> FilterByLocation(ObservableCollection<TourDTO> tours, string locationInput)
+        {
+
+            if (string.IsNullOrEmpty(locationInput))
+            return tours;
+
+            return new ObservableCollection<TourDTO>(tours.Where(tour => MatchesLocation(tour, locationInput)));
+        
+        }
+
+        private ObservableCollection<TourDTO> FilterByDuration(ObservableCollection<TourDTO> tours, string durationInput)
+        {
+            if (string.IsNullOrEmpty(durationInput))
+                return tours;
+
+            return new ObservableCollection<TourDTO>(tours.Where(tour => tour.Duration.ToString() == durationInput));
+        }
+
+        private ObservableCollection<TourDTO> FilterByLanguage(ObservableCollection<TourDTO> tours, string languageInput)
+        {
+            if (string.IsNullOrEmpty(languageInput))
+                return tours;
+
+            return new ObservableCollection<TourDTO>(tours.Where(tour => tour.Language.Name.ToLower().Contains(languageInput)));
+        }
+
+        private ObservableCollection<TourDTO> FilterByGuests(ObservableCollection<TourDTO> tours, int numGuestsInput)
+        {
+            if (numGuestsInput <= 0)
+                return tours;
+
+            return new ObservableCollection<TourDTO>(tours.Where(tour => numGuestsInput <= tour.MaxGuests));
+        }
+
+        private ObservableCollection<TourDTO> ApplyFilters(ObservableCollection<TourDTO> tours, string locationInput, string durationInput, string languageInput, int numGuestsInput)
+        {
+            ObservableCollection<TourDTO> filteredTours = tours;
+
+            filteredTours = FilterByLocation(filteredTours, locationInput);
+            filteredTours = FilterByDuration(filteredTours, durationInput);
+            filteredTours = FilterByLanguage(filteredTours, languageInput);
+            filteredTours = FilterByGuests(filteredTours, numGuestsInput);
+
+            return filteredTours;
+        }
+
         private void SearchClick(object sender, RoutedEventArgs e)
         {
             UpdateTours();
@@ -77,27 +124,11 @@ namespace BookingApp.View.Tourist
             string languageInput = TextBoxLanguage.Text.Trim().ToLower();
             int numGuestsInput = int.TryParse(TextBoxNumGuest.Text.Trim(), out numGuestsInput) ? numGuestsInput : 0;
 
-            FilteredTours.Clear();
-            foreach (var tour in Tours)
-            {
-                if (!MatchesLocation(tour, locationInput))
-                    continue;
-
-                if (!string.IsNullOrEmpty(durationInput) && tour.Duration.ToString() != durationInput)
-                    continue;
-
-                if (!string.IsNullOrEmpty(languageInput) && !tour.Language.Name.ToLower().Contains(languageInput))
-                    continue;
-
-                if (numGuestsInput > 0 && numGuestsInput > tour.MaxGuests)
-                    continue;
-
-                FilteredTours.Add(tour);
-            }
+            FilteredTours = ApplyFilters(Tours, locationInput, durationInput, languageInput, numGuestsInput);
             Table.ItemsSource = FilteredTours;
-
-
         }
+
+        
         void ResetLocation() {
             FilteredTours.Clear();
             foreach (var tour in Tours)
