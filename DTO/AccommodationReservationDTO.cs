@@ -48,7 +48,18 @@ namespace BookingApp.DTO
             UserId = userId;
             AccommodationId = accommodationId;
         }
-
+        public AccommodationReservationDTO(AccommodationReservation accommodationReservation) 
+        {
+            Id = accommodationReservation.Id;
+            StartDate = accommodationReservation.StartDate.ToString();
+            EndDate = accommodationReservation.EndDate.ToString();
+            UserId = accommodationReservation.User.Id;
+            AccommodationId = accommodationReservation.Accommodation.Id;
+        }
+        public AccommodationReservationDTO()
+        {
+            
+        }
         public AccommodationReservation ToAccommodationReservation(AccommodationReservationDTO accommodationReservation)
         {
 

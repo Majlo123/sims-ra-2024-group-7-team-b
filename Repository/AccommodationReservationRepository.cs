@@ -1,4 +1,5 @@
-﻿using BookingApp.Model;
+﻿using BookingApp.DTO;
+using BookingApp.Model;
 using BookingApp.Serializer;
 using System;
 using System.Collections.Generic;
@@ -71,6 +72,13 @@ namespace BookingApp.Repository
         {
             _accommodationReservations = _serializer.FromCSV(FilePath);
             return _accommodationReservations.FindAll(ar => ar.User.Id == user.Id);
+        }
+        public List<AccommodationReservation> GetReservationsWithinNDays(int period,List<AccommodationReservation> accommodationReservations)
+        {
+            DateOnly currentDate = DateOnly.FromDateTime(DateTime.Today);
+            DateOnly nDaysAgo = currentDate.AddDays(-period);
+            var reservationsWithinNDays = accommodationReservations.Where(r => r.EndDate > nDaysAgo && r.EndDate <= currentDate).ToList();
+            return reservationsWithinNDays;
         }
     }
 }

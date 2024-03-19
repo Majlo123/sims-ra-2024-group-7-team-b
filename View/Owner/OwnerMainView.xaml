@@ -58,20 +58,33 @@
                           AutoGenerateColumns="False"
                           IsReadOnly="True"
                           SelectionMode="Single"
-                          x:Name="AccommodationsReservationsToGradeDataGrid">
-
+                          x:Name="AccommodationsReservationsToGradeDataGrid"
+                          ItemsSource="{Binding accommodationReservationDTOsToGrade, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedItem="{Binding selectedReservation, UpdateSourceTrigger=PropertyChanged}">
 
                     <DataGrid.Columns>
-                    <DataGridTextColumn Header="Username"
-                                            Width="*"/>
+                        <DataGridTextColumn Header="User ID"
+                                            Width="*"
+                                        Binding="{Binding UserId}"/>
 
-                    <DataGridTextColumn Header="Accommodation Code"
-                                            Width="*"/>
+                        <DataGridTextColumn Header="Accommodation ID"
+                                            Width="*"
+                                            Binding="{Binding AccommodationId}"/>
 
-                        <DataGridTextColumn Header="Accommodation Name"
-                    Width="*"/>
-                        <DataGridTextColumn Header=""
-                    Width="*"/>
+                        <DataGridTextColumn Header="Start Date"
+                    Width="*"
+                         Binding="{Binding StartDate}"/>
+                        <DataGridTextColumn Header="End Date"
+                    Width="*"
+                        Binding="{Binding EndDate}"
+                        />
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button x:Name="GradeButton" Width="auto" Content="Grade" Click="Grade_Click"></Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
                 <Label Content="Reservations To Grade:" Foreground="White" HorizontalAlignment="Left" Margin="10,24,0,0" VerticalAlignment="Top"/>
