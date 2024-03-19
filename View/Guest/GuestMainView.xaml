@@ -1,0 +1,133 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BookingApp.View.Guest"
+        xmlns:DTO="clr-namespace:BookingApp.DTO" x:Class="BookingApp.View.Guest.GuestMainView"
+        mc:Ignorable="d"
+        Title="MainWindow" 
+        Height="600" 
+        Width="850"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent">
+    <Grid Margin="0">
+        <Border Background="#212529"
+                CornerRadius="20" />
+
+        <Grid Margin="0">
+
+            <!--// Base Grid //-->
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="230" />
+                <ColumnDefinition Width="620" />
+            </Grid.ColumnDefinitions>
+
+            <!--// Navigation Panel //-->
+
+            <Grid HorizontalAlignment="Left"
+                  Width="230">
+
+                <Border Background="#272B2F"
+                        CornerRadius="20,0,0,20" />
+
+                <StackPanel Height="400"
+                            Width="230" 
+                            VerticalAlignment="Top">
+
+                    <!--// Home //-->
+
+
+
+                </StackPanel>
+
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <StackPanel Orientation="Horizontal"
+                            Width="620"
+                            Height="50px"
+                            VerticalAlignment="Top">
+                    <TextBox x:Name="NameTextBox"
+                             Width="122px" 
+                             Height="30px"
+                             Margin="15, 5, 5, 5"/>
+                    <ComboBox x:Name="LocationComboBox"
+                              ItemsSource="{Binding Path = locations}"
+                              DisplayMemberPath="FullLocation"
+                                
+                              SelectedValue="{Binding Path= selectedLocation, UpdateSourceTrigger=PropertyChanged}"
+                              Width="150px"
+                              Height="30px"
+                              Text="Location" 
+                              ToolTip="Select Location"
+                              Margin="5px"
+                              SelectedIndex="0">
+                    </ComboBox>
+                    <ComboBox x:Name="TypeComboBox" Width="122 px" 
+                             Height="30px"
+                             Margin="5px">
+                        <CheckBox x:Name="ApartmentCheckBox" Content="Apartment"/>
+                        <CheckBox x:Name="HouseCheckBox" Content="House"/>
+                        <CheckBox x:Name="CottageCheckBox" Content="Cottage"/>
+                    </ComboBox>
+                    <TextBox x:Name="MaxGuestsTextBox"
+                             Width="50"
+                             Height="30"
+                             ToolTip="Write Number Of Guests"
+                             Margin="5px">
+                    </TextBox>
+                    <TextBox x:Name="LenghtOfStayTextBox"
+                            Width="50"
+                            Height="30"
+                            ToolTip="Write the Lenght of your Stay"
+                             Margin="5px">
+                    </TextBox>
+                    <Button x:Name="SearchButton"
+                            Width="50"
+                            Height="30"
+                            Margin="5px"
+                            Content="Search" Click="SearchButton_Click">
+                        
+                    </Button>
+                </StackPanel>
+                <DataGrid Height="500px"
+                          Margin="10, 40, 10 ,10"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          SelectionMode="Single"
+                          x:Name="AccommodationsDataGrid"
+                          ItemsSource="{Binding accommodations, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedItem="{Binding selectedAccommodation, UpdateSourceTrigger=PropertyChanged}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name"
+                                            Width="*"
+                                            Binding="{Binding Name}"/>
+                        <DataGridTextColumn Header="Location"
+                                            Width="*"
+                                            Binding="{Binding MergedLocation}"/>
+                        <DataGridTextColumn Header="Type"
+                                            Width="*"
+                                            Binding="{Binding Type}"/>
+                        <DataGridTextColumn Header="Max no. of guest"
+                                            Width="*"
+                                            Binding="{Binding MaxGuests}"/>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button x:Name="ReserveButton" Width="auto" Content="Reserve" Click="ReserveButton_Click"></Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+
+            </Grid>
+
+        </Grid>
+
+
+    </Grid>
+</Window>

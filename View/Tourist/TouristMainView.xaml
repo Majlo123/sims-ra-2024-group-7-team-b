@@ -1,0 +1,171 @@
+﻿<Window x:Class="BookingApp.View.Tourist.TouristMainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BookingApp.View.Tourist"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="TouristMainView" Height="768" Width="1024">
+    <Window.Resources>
+        <!-- Define custom colors -->
+        <Color x:Key="PrimaryColor">#2196F3</Color>
+        <Color x:Key="SecondaryColor">#FFC107</Color>
+        <Color x:Key="BackgroundColor">#F5F5F5</Color>
+        <Color x:Key="ButtonColor">#4CAF50</Color>
+        <Color x:Key="TextColor">#212121</Color>
+
+        <!-- Define custom brushes using the colors -->
+        <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}" />
+        <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource SecondaryColor}" />
+        <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}" />
+        <SolidColorBrush x:Key="ButtonBrush" Color="{StaticResource ButtonColor}" />
+        <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextColor}" />
+
+        <!-- Define custom styles for buttons -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource ButtonBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource BackgroundBrush}" />
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+                    <Setter Property="Background" Value="{StaticResource SecondaryBrush}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Define custom style for Labels -->
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <!-- Define custom style for TextBoxes -->
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+
+        <Style TargetType="DataGrid">
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="IsTextSearchEnabled" Value="True" />
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="AutoGenerateColumns" Value="False" />
+            <Setter Property="SelectedItem" Value="{Binding Path=selectedTour, UpdateSourceTrigger=PropertyChanged}" />
+            <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+            <Setter Property="BorderThickness" Value="0" />
+            <!-- Remove border -->
+            <Setter Property="RowHeight" Value="30" />
+            <!-- Increase row height -->
+            <Setter Property="FontSize" Value="14" />
+            <!-- Increase font size -->
+            <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="{StaticResource PrimaryBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource BackgroundBrush}" />
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="14" />
+            <!-- Increase font size -->
+        </Style>
+        
+        
+    </Window.Resources>
+    <Grid Background="{StaticResource BackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Labels -->
+        <Label Content="Location" Grid.Row="0" Grid.Column="0" />
+        <Label Content="Tour Duration" Grid.Row="1" Grid.Column="0" />
+        <Label Content="Language" Grid.Row="2" Grid.Column="0" />
+        <Label Content="Number of guests" Grid.Row="3" Grid.Column="0" />
+
+        <!-- Textboxes for input -->
+        <TextBox x:Name="TextBoxLocation" Grid.Row="0" Grid.Column="1" />
+        <TextBox x:Name="TextBoxDuration" Grid.Row="1" Grid.Column="1" />
+        <TextBox x:Name="TextBoxLanguage" Grid.Row="2" Grid.Column="1" />
+        <TextBox x:Name="TextBoxNumGuest" Grid.Row="3" Grid.Column="1" />
+
+        <!-- Search button -->
+        <Button Name="Search" Content="Search" Click="SearchClick" Grid.Row="4" Grid.Column="1" />
+
+        <!-- DataGrid for displaying tours -->
+        <DataGrid Name="Table" Grid.Row="5" Grid.ColumnSpan="2" Margin="10" 
+          IsTextSearchEnabled="True" IsReadOnly="True" 
+          ItemsSource="{Binding Path=Tours, UpdateSourceTrigger=PropertyChanged}" 
+          AutoGenerateColumns="False" SelectedItem="{Binding Path=SelectedTour, UpdateSourceTrigger=PropertyChanged}">
+            <!-- Columns -->
+            <DataGrid.Columns>
+                <!-- Image column -->
+             
+                <!-- Name column -->
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                <!-- Location column -->
+                <DataGridTemplateColumn Header="Location">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <!-- TextBlock to display location -->
+                            <TextBlock>
+                        <!-- Displaying city -->
+                        <Run Text="{Binding Location.City}" />
+                        <!-- Displaying country -->
+                        <Run Text=", " />
+                        <Run Text="{Binding Location.Country}" />
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!-- Duration column -->
+                <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" />
+                <!-- Language column -->
+                <DataGridTextColumn Header="Language" Binding="{Binding Language.Name}" />
+                <!-- Description column -->
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
+                <!-- CheckPoints column -->
+                
+                               
+                <!-- TourTime column -->
+                
+                <!-- MaxGuests column -->
+                <DataGridTextColumn Header="MaxGuests" Binding="{Binding MaxGuests}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+        <!-- Reserve button -->
+        <Button Name="Reserve" Content="Reserve" Click="ReserveClick" Grid.Row="6" Grid.Column="1" />
+    </Grid>
+</Window>
